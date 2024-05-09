@@ -1,0 +1,98 @@
+<div cdkVirtualScrollingElement class="viewport" *ngIf="enableVirtualScroll; else defaultLayout">
+  <table [class.min-width-100]="minWidth100">
+    <ng-container *ngFor="let template of templates; trackBy:trackByTemplateName">
+      <ng-container [ngSwitch]="template.templateName">
+        <ng-container *ngSwitchCase="TEMPLATE.header">
+          <thead [class.fixed-header]="fixedHeader" [style.top.px]="fixedHeader?.topIndent"
+                 (mousedown)="$event.stopPropagation()">
+          <ng-container
+            *ngTemplateOutlet="template.template; context: { $implicit: columns }"></ng-container>
+          </thead>
+        </ng-container>
+
+        <cdk-virtual-scroll-viewport *ngSwitchCase="TEMPLATE.body" itemSize="58">
+          <tbody>
+          <ng-container
+            *cdkVirtualFor="let item of (visibleData.items | displayFn: getRowsList); let i = index; trackBy: trackByDataId"
+          >
+            <ng-container
+              *ngTemplateOutlet="template.template; context: { $implicit: item, columns, rowIndex: i }"></ng-container>
+          </ng-container>
+          </tbody>
+        </cdk-virtual-scroll-viewport>
+
+        <ng-container *ngSwitchCase="TEMPLATE.footer">
+          <tfoot class="pagination" *ngIf="enablePagination">
+          <td [attr.colspan]="'100%'">
+            <app-pagination [total]="visibleData.total" [formControl]="paginationControl"
+                            (mousedown)="$event.stopImmediatePropagation()"></app-pagination>
+          </td>
+          </tfoot>
+          <tfoot>
+          <ng-container
+            *ngTemplateOutlet="
+                template.template;
+                context: { $implicit: footerColumns }
+              "></ng-container>
+          </tfoot>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+    <tfoot class="pagination" *ngIf="enablePagination && !(templates | displayFn: haveFooter)">
+    <td [attr.colspan]="'100%'">
+      <app-pagination [total]="visibleData.total" [formControl]="paginationControl"
+                      (mousedown)="$event.stopPropagation()"></app-pagination>
+    </td>
+    </tfoot>
+  </table>
+</div>
+
+<ng-template #defaultLayout>
+  <table [class.min-width-100]="minWidth100">
+    <ng-container *ngFor="let template of templates; trackBy:trackByTemplateName">
+      <ng-container [ngSwitch]="template.templateName">
+        <ng-container *ngSwitchCase="TEMPLATE.header">
+          <thead [class.fixed-header]="fixedHeader" [style.top.px]="fixedHeader?.topIndent"
+                 (mousedown)="$event.stopPropagation()">
+          <ng-container
+            *ngTemplateOutlet="template.template; context: { $implicit: columns }"></ng-container>
+          </thead>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="TEMPLATE.body">
+          <tbody>
+          <ng-container
+            *ngFor="let item of (visibleData.items | displayFn: getRowsList); let i = index; trackBy:trackByDataId">
+            <ng-container
+              *ngTemplateOutlet="template.template; context: { $implicit: item, columns, rowIndex: i }"></ng-container>
+          </ng-container>
+          </tbody>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="TEMPLATE.footer">
+          <tfoot class="pagination" *ngIf="enablePagination">
+          <td [attr.colspan]="'100%'">
+            <app-pagination [total]="visibleData.total" [formControl]="paginationControl"
+                            (mousedown)="$event.stopImmediatePropagation()"></app-pagination>
+          </td>
+          </tfoot>
+          <tfoot>
+          <ng-container
+            *ngTemplateOutlet="
+                template.template;
+                context: { $implicit: footerColumns }
+              "></ng-container>
+          </tfoot>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+    <tfoot class="pagination" *ngIf="enablePagination && !(templates | displayFn: haveFooter)">
+    <td [attr.colspan]="'100%'">
+      <app-pagination [total]="visibleData.total" [formControl]="paginationControl"
+                      (mousedown)="$event.stopPropagation()"></app-pagination>
+    </td>
+    </tfoot>
+  </table>
+</ng-template>

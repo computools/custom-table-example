@@ -1,0 +1,17 @@
+<input
+  [(ngModel)]="input"
+  [placeholder]="placeholder"
+  (ngModelChange)="onInput($event)">
+
+<ul class="autocomplete-list scroll-layout">
+  <ng-container *ngFor="let item of filteredItems">
+    <li
+      *ngIf="item.name"
+      class="autocomplete-list__item"
+      (click)="onSelect(item.value)">
+      <input type="checkbox" [checked]="selectedItems | displayFn : isItemSelected : item.value"
+             (click)="$event.preventDefault()">
+      <span>{{ item.name }}</span>
+    </li>
+  </ng-container>
+</ul>

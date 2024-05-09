@@ -1,0 +1,21 @@
+<div class="radio-buttons">
+  <ng-container *ngFor="let item of items">
+    <div
+      class="radio-button"
+      [class.radio-button_default]="type === 'default'"
+      [class.radio-button_bordered]="type === 'bordered'"
+      [class.radio-button_checked]="value == item.value"
+      (click)="change(item.value)">
+      <input
+        class="radio-button__original"
+        type="radio"
+        [value]="item.value"
+        [ngModel]="value"
+        (ngModelChange)="change($event)"
+        [name]="name" />
+
+      <div class="radio-button__button"></div>
+      <span class="radio-button__label">{{ item.name }}</span>
+    </div>
+  </ng-container>
+</div>

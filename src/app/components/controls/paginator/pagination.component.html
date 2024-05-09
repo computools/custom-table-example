@@ -1,0 +1,40 @@
+<div class="container">
+  <select class="page-size" [formControl]="pageSizeControl">
+    @for (option of pageSizes; track option) {
+      <option [value]="option.id">{{ option.name }}</option>
+    }
+  </select>
+  <div class="paginator">
+    <div class="paginator__button" [class.disabled]="value.page === 1" (click)="selectPage(value.page - 1)">
+      <i class="material-icons">arrow_back_ios</i>
+    </div>
+    <div class="paginator__pages">
+      <ng-container *ngIf="visiblePages[0] !== 1">
+        <div
+          class="paginator__page"
+          (click)="selectPage(1)">1
+        </div>
+        <div class="paginator__page">...</div>
+      </ng-container>
+      <div
+        class="paginator__page"
+        (click)="selectPage(page)"
+        [class.paginator__page-active]="value.page === page"
+        *ngFor="let page of visiblePages; let i = index">{{ page }}
+      </div>
+      <ng-container *ngIf="visiblePages[visiblePages.length - 1] !== totalPages">
+        <div class="paginator__page">...</div>
+        <div
+          class="paginator__page"
+          (click)="selectPage(totalPages)">{{ totalPages }}
+        </div>
+      </ng-container>
+    </div>
+    <div
+      class="paginator__button paginator__button-next"
+      [class.disabled]="value.page === totalPages"
+      (click)="selectPage(value.page + 1)">
+      <i class="material-icons">arrow_forward_ios</i>
+    </div>
+  </div>
+</div>

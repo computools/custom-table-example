@@ -1,0 +1,135 @@
+<div *ngIf="_data | displayFn: isDataEmpty" class="no-data">{{ 'No Data' }}</div>
+
+<app-base-table
+  [data]="_data"
+  [class.display-none]="_data | displayFn: isDataEmpty"
+  [columns]="columns"
+  [minWidth100]="minWidth100"
+  [enablePagination]="enablePagination"
+  [enableVirtualScroll]="_enableVirtualScroll"
+  (onFilter)="scrollParentContainerToTheTop()"
+  (onSort)="scrollParentContainerToTheTop()"
+  (scrollIndexChanged)="onScrollIndexChanged($event)"
+  (pageChanged)="scrollParentContainerToTheTop()"
+  (dataEdit)="onDataEdit($event)">
+  <ng-template appTemplate="header">
+    <tr>
+      <!-- Table header index -->
+      <th *ngIf="showIndex" class="small hidden" [attr.rowspan]="(columns | displayFn:haveInnerColumns) ? 2 : 1"></th>
+      <!-- Table header columns -->
+      <ng-container *ngFor="let column of columns; let i = index">
+        <!-- Table header collapsed total column -->
+        <ng-container *ngIf="(collapsedColumns$ | async) | displayFn:getCollapsedColumn:i as collapsedColumn">
+          <th app-custom-table-header-collapsed
+              *ngIf="collapsedColumn.position !== 'header'"
+              [config]="collapsedColumn"
+              [rowspanAdditional]="2"></th>
+        </ng-container>
+
+        <!-- Table header columns without inner columns -->
+        <ng-container *ngIf="!column.hidden">
+          <th *ngIf="!column.collapsible; else collapsibleHeader"
+              app-custom-table-header
+              [config]="column"
+              [hasInnerColumns]="!!column.columns"
+              [collapsed]="(collapsedColumns$ | async) | displayFn:isColumnCollapsed:i">
+          </th>
+
+          <ng-template #collapsibleHeader>
+            <th app-custom-table-header-collapsible
+                [config]="column"
+                [hasInnerColumns]="!!column.columns"
+                [isCollapsed]="(collapsedColumns$ | async) | displayFn:isHeaderCollapsed:column">
+            </th>
+          </ng-template>
+        </ng-container>
+      </ng-container>
+    </tr>
+
+    <!-- Table header inner columns -->
+    <tr *ngIf="columns | displayFn: haveInnerColumns">
+      <ng-container *ngFor="let mainColumn of columns; let i = index; trackBy: trackByColumn">
+        <ng-container *ngIf="mainColumn.columns">
+          <!-- Table header collapsed total column -->
+          <ng-container
+            *ngIf="(collapsedColumns$ | async) | displayFn:getCollapsedColumn:i:mainColumn as collapsedColumn">
+            <th app-custom-table-header-collapsed
+                *ngIf="collapsedColumn.position === 'header'"
+                [config]="collapsedColumn"></th>
+          </ng-container>
+
+          <th *ngFor="let column of mainColumn.columns"
+              app-custom-table-header
+              [config]="column"
+              [hasInnerColumns]="false"
+              [collapsed]="(collapsedColumns$ | async) | displayFn:isColumnCollapsed:i:mainColumn"
+              [fieldForFilter]="mainColumn | displayFn : resolveFieldName : column">
+          </th>
+        </ng-container>
+      </ng-container>
+    </tr>
+  </ng-template>
+
+
+  <ng-template appTemplate="body" let-row let-columns="columns" let-rowIndex="rowIndex">
+    <ng-container *ngIf="toTableRowType(row); let row">
+      <ng-container *ngIf="toDataRowType(row); let row">
+        <ng-container *ngIf="!((collapsedDataGroups$ | async) | displayFn:isDataGroupCollapsed:row.dataGroupIndex)">
+          <tr [ngClass]="rows?.[row.data.id]?.state"
+              [class.selected-row]="selectedRowId === row.data.id"
+              [class.selectable-row]="rows?.[row.data.id]?.selectable">
+            <td *ngIf="showIndex" class="small">
+              {{ row.dataIndex + 1 | displayFn: getIndex | number : '2.0' }}
+            </td>
+            <ng-container *ngFor="let column of columns; let columnIndex = index; trackBy: trackByColumn">
+              <!-- Table collapsed total column -->
+              <td class="empty-data"
+                  rowspan="0"
+                  [ngClass]="((collapsedColumns$ | async) | displayFn:getCollapsedColumn:columnIndex)?.cssClass"
+                  [style.display]="'table-cell'"
+                  *ngIf="rowIndex === currentVisibleScrolledIndex && (collapsedColumns$ | async) | displayFn:showDataCollapsed:columnIndex:column"></td>
+              <ng-container *ngIf="!column.columns; else innerColumns">
+                <td
+                  *ngIf="(collapsedColumns$ | async) | displayFn:isColumnNotCollapsed:columnIndex"
+                  app-custom-table-data
+                  [config]="column"
+                  [data]="row.data"
+                  [activeField]="activeField"
+                  (click)="dataClick($event.target, row.data, $any(rowIndex), column)"></td>
+              </ng-container>
+              <ng-template #innerColumns>
+                <ng-container *ngFor="let innerColumn of $any(column.columns); trackBy: trackByColumn">
+                  <td
+                    app-custom-table-inner-data
+                    *ngIf="(collapsedColumns$ | async) | displayFn:isColumnNotCollapsed:columnIndex:column"
+                    [config]="column"
+                    [innerConfig]="innerColumn"
+                    [data]="row.data"
+                    [activeField]="activeField"
+                    (click)="dataClick($event.target, row.data, $any(rowIndex), column, innerColumn)"></td>
+                </ng-container>
+              </ng-template>
+            </ng-container>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+
+  <!-- Table footer -->
+  <ng-template appTemplate="footer" *ngIf="footerColumns">
+    <tr *ngFor="let row of footerColumns; let rowIndex = index">
+      <th *ngIf="showIndex" class="small"
+          [class.hidden]="row?.[0]?.hideIndex"></th>
+
+      <!-- Table header collapsed total column -->
+      <ng-container *ngFor="let config of row; let i = index">
+        <th class="total-column"
+            *ngIf="rowIndex === 0 && (collapsedColumns$ | async) | displayFn:showDataCollapsed:i"
+            [style.display]="'table-cell'"
+            [ngClass]="((collapsedColumns$ | async) | displayFn:getCollapsedColumn:i)?.cssClass"
+            [attr.rowspan]="footerColumns?.length"></th>
+      </ng-container>
+    </tr>
+  </ng-template>
+</app-base-table>

@@ -1,0 +1,81 @@
+@import "../../../../styles/colors";
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+.container {
+  display: flex;
+  gap: 10px;
+
+  @include small {
+    gap: 40px;
+  }
+}
+
+.page-size {
+  width: 120px;
+  box-shadow: 0 2px 5px 1px $stroke-1;
+  cursor: pointer;
+
+  @include small {
+    width: 145px;
+  }
+}
+
+.paginator {
+  display: flex;
+  gap: 8px;
+
+  @include small {
+    gap: 16px;
+  }
+
+  &__button, &__pages {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    background: $primary-0;
+    border-radius: 2px;
+    border: 1px solid $stroke-1;
+    box-shadow: 0 2px 5px 1px $stroke-1;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+
+  &__button {
+    justify-content: center;
+    width: 30px;
+    color: $additional-90;
+  }
+
+  &__button-next {
+    .icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    color: $additional-50;
+    box-sizing: border-box;
+
+    &:hover {
+      color: $additional-90;
+    }
+  }
+
+  &__page-active {
+    color: $additional-90;
+  }
+}
+
+.disabled {
+  color: $additional-50;
+  pointer-events: none;
+}

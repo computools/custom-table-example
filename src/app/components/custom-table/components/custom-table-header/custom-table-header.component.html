@@ -1,0 +1,12 @@
+<div class="column" [class.column_with-filters]="config.hasFilter" [class.column_with-prefix]="config.columnPrefix">
+  <span *ngIf="config.columnPrefix" class="column__prefix">
+    {{ config.columnPrefix }}
+  </span>
+  <span class="column__name">
+    <ng-container *ngIf="!(config.name | isArray); else columnNames">{{ config.name }}</ng-container>
+    <ng-template #columnNames>
+      <ng-container *ngFor="let name of $any(config.name)">{{ name }}</ng-container>
+    </ng-template>
+  </span>
+  <app-column-filter *ngIf="config.hasFilter" [field]="fieldForFilter ?? config.fieldName"></app-column-filter>
+</div>

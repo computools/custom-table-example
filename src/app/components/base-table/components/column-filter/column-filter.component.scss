@@ -1,0 +1,71 @@
+@import "styles/colors";
+@import "styles/variables";
+@import "styles/mixins";
+
+.filters-menu-trigger {
+  position: relative;
+  cursor: pointer;
+
+  &__filter {
+    border-radius: 2px;
+    position: relative;
+  }
+
+  &__sort, &__current-filters {
+    position: absolute;
+    right: 13px;
+    bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 22px;
+    color: $primary-0;
+    visibility: hidden;
+    opacity: 0;
+    @include transition($animation-duration);
+  }
+
+  &__sort {
+    background: $accent-2;
+    .icon {
+      width: 12px;
+      height: 14px;
+    }
+
+    &_moved {
+      right: 29px;
+    }
+  }
+
+  &__current-filters {
+    background: $primary-50;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  &:hover, &_active {
+    .filters-menu-trigger__filter {
+      background: $primary-100;
+      color: $primary-0;
+    }
+  }
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.inline-dialog {
+  &__sort {
+    padding: 9px 8px 10px 8px;
+    border-bottom: 1px solid $stroke-1;
+  }
+
+  &__filters {
+    padding: 16px 8px;
+  }
+}

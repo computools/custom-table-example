@@ -1,0 +1,36 @@
+@import "reset";
+
+@import "colors";
+@import "mixins";
+@import "fonts";
+@import "variables";
+
+@import "base/table";
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  color: $primary-100;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  scrollbar-color: $stroke-1 transparent;
+  scrollbar-width: thin;
+}
+
+input, button {
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+}
+
+app-icon.icon {
+  width: 24px;
+  height: 24px;
+
+  @include large {
+    width: 18px;
+    height: 18px;
+  }
+}
+

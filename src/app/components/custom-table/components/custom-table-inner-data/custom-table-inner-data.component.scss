@@ -1,0 +1,48 @@
+@import "styles/colors";
+@import "styles/variables";
+
+:host {
+  &.data-with-action {
+    transition: $animation-duration;
+    cursor: pointer;
+
+    &:hover, &_active {
+      .data {
+        background: $primary-30 !important;
+        box-shadow: inset 0 0 0 2px $primary-50;
+      }
+    }
+  }
+}
+
+// Data
+
+.data {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+  max-height: 54px;
+  min-height: 54px;
+  color: $additional-90;
+  background: inherit;
+  box-shadow: inset 0 0 0 1px $stroke-1;
+  border-radius: 2px;
+
+  &__prefix {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    color: $additional-50;
+  }
+
+  &__data {
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .icon {
+    margin: auto;
+  }
+}

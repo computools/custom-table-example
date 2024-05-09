@@ -1,0 +1,96 @@
+@import "../../../../styles/colors";
+@import "../../../../styles/variables";
+@import "../../../../styles/variables";
+
+.radio-buttons {
+  display: grid;
+  gap: 8px;
+}
+
+.radio-button {
+  display: flex;
+  gap: 24px;
+  cursor: pointer;
+
+  &__original {
+    display: none;
+  }
+
+  &__button {
+    width: 20px;
+    height: 20px;
+    background: $primary-0;
+    border: 1px solid $primary-50;
+    border-radius: 20px;
+
+    &:after {
+      content: '';
+      position: absolute;
+      transition: background-color ease-in-out 300ms;
+    }
+  }
+
+  &__label {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: $primary-100;
+  }
+
+  &_checked {
+    .radio-button__button {
+      border: 1px solid $primary-100;
+      position: relative;
+
+      &:after {
+        top: 4px;
+        left: 4px;
+        width: 12px;
+        height: 12px;
+        background-color: $primary-100;
+        border-radius: 12px;
+      }
+    }
+  }
+
+  &_bordered {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 38px;
+    padding: 9px 24px;
+    background: $primary-30;
+    border: 1px solid $stroke-1;
+    border-radius: 3px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &_default {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: 38px;
+    padding: 9px 8px;
+    background: $primary-0;
+
+    .radio-button__button {
+      border: 1px solid $stroke-1;
+    }
+
+    .radio-button__label {
+      font-weight: 300;
+      font-size: 14px;
+      color: $additional-80;
+    }
+
+    &.radio-button_checked {
+      .radio-button__button {
+        border: 1px solid $primary-100;
+      }
+    }
+  }
+}

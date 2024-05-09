@@ -1,0 +1,26 @@
+<div class="column" [class.column_with-filters]="config.hasFilter" [class.column_with-prefix]="config.columnPrefix">
+  <app-column-collapse [isCollapse]="isCollapsed" (click)="switch()"></app-column-collapse>
+  <div *ngIf="!isCollapsed">
+    <span *ngIf="config.columnPrefix" class="column__prefix">
+      {{ config.columnPrefix }}
+    </span>
+    <span class="column__name">
+      <ng-container *ngIf="!(config.name | isArray); else columnNames">{{ config.name }}</ng-container>
+      <ng-template #columnNames>
+        <ng-container *ngFor="let name of $any(config.name)">{{ name }}</ng-container>
+      </ng-template>
+    </span>
+    <span *ngIf="config.columnSuffix" class="column__suffix">
+      <ng-container *ngIf="!(config.columnSuffix | isArray); else columnSuffixes">
+        {{ config.columnSuffix }}
+      </ng-container>
+      <ng-template #columnSuffixes>
+        <ng-container *ngFor="let columnSuffix of $any(config.columnSuffix)">
+          {{ columnSuffix }}
+        </ng-container>
+      </ng-template>
+    </span>
+  </div>
+  <app-column-filter *ngIf="config.hasFilter" [field]="fieldForFilter ?? config.fieldName"></app-column-filter>
+</div>
+

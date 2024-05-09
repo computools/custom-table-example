@@ -1,0 +1,166 @@
+@import "styles/colors";
+@import "styles/variables";
+
+app-base-table table {
+  background: $primary-0;
+  table-layout: fixed;
+  border-spacing: 4px;
+
+  border-collapse: separate;
+  vertical-align: middle;
+  user-select: none;
+  -webkit-user-select: none;
+
+  thead {
+    height: 112px;
+    position: relative;
+    z-index: 10;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: $primary-0;
+      width: 100%;
+      height: 124px;
+    }
+  }
+
+  tfoot {
+    th {
+      background: $table-footer;
+      font-weight: 400;
+    }
+  }
+
+  tr, thead, th, td {
+    vertical-align: middle;
+  }
+
+  th, td {
+    box-sizing: border-box;
+    height: 54px;
+    box-shadow: inset 0 0 0 1px $stroke-1;
+    border-radius: 2px;
+
+    &.collapsed {
+      display: none;
+    }
+  }
+
+  td {
+    min-height: 54px;
+    max-height: 54px;
+  }
+
+  th {
+    background: $table-header;
+    min-width: 220px;
+    max-width: 220px;
+    width: 220px;
+
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.02em;
+    color: $additional-100;
+    z-index: 1;
+    position: relative;
+
+    &.empty-column, &.header-collapsed {
+      background: $primary-40;
+      max-width: 40px;
+      min-width: 40px;
+      width: 40px;
+    }
+
+    &.header-collapsed {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      text-align: center;
+    }
+
+    &.total-column {
+      min-width: 40px;
+      max-width: 40px;
+      width: 40px;
+    }
+
+    &.visible {
+      display: table-cell;
+    }
+
+    &.display-none {
+      display: none;
+    }
+
+    &.text-align-left {
+      .additional-header {
+        justify-content: flex-start;
+        margin-left: 16px;
+      }
+    }
+  }
+
+  tr {
+    background: $primary-0;
+  }
+
+  td {
+    white-space: break-spaces !important;
+    text-align: center;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    background: inherit;
+    box-sizing: border-box;
+
+    &.empty-data {
+      background: $primary-40;
+      display: none;
+      min-width: 40px;
+      max-width: 40px;
+      width: 40px;
+    }
+
+    &.editable-column {
+      min-width: 220px;
+      max-width: 220px;
+      padding: 0;
+    }
+
+    &.visible {
+      display: table-cell;
+    }
+  }
+
+  th.sortable-column {
+    cursor: pointer;
+  }
+
+  .sort-icon {
+    margin-left: 10px;
+  }
+
+  .selectable-row {
+    cursor: pointer;
+
+    &:hover {
+      .data {
+        transition: $animation-duration;
+        background: $primary-30;
+        box-shadow: inset 0 0 0 2px $primary-50;
+      }
+    }
+  }
+
+  .selected-row {
+    .data {
+      transition: $animation-duration;
+      background: $primary-30;
+      box-shadow: inset 0 0 0 2px $primary-50;
+    }
+  }
+}

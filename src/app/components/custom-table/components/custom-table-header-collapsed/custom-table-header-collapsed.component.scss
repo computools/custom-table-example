@@ -1,0 +1,12 @@
+@import "styles/colors";
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.prefix {
+  color: $additional-50;
+  font-size: 14px;
+  font-weight: 400;
+}

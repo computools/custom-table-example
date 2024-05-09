@@ -1,0 +1,58 @@
+<div
+  class="filters-menu-trigger"
+  [class.filters-menu-trigger_active]="isFiltersMenuOpen || sortState || filtersCount"
+  (click)="toggleFiltersMenu()">
+  <div
+    class="filters-menu-trigger__sort"
+    [class.visible]="sortState"
+    [class.filters-menu-trigger__sort_moved]="filtersCount">
+    <span class="material-icons">{{ sortState > 0 ? 'arrow_upward' : 'arrow_downward' }}</span>
+  </div>
+
+  <div class="filters-menu-trigger__current-filters" [class.visible]="filtersCount">
+    {{ filtersCount }}
+  </div>
+
+  <span class="material-icons filters-menu-trigger__filter" cdkOverlayOrigin
+        #trigger="cdkOverlayOrigin">filter_list</span>
+</div>
+
+<ng-template
+  #filterMenu
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isFiltersMenuOpen"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  [cdkConnectedOverlayPositions]="overlayPositions"
+  cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+  (backdropClick)="closeFiltersMenu(true)">
+  <form class="inline-dialog" [formGroup]="filtersForm" (ngSubmit)="apply()">
+    <h2 class="inline-dialog__header">
+      Filters
+      <span class="material-icons" (click)="closeFiltersMenu(true)">close</span>
+    </h2>
+    <div class="inline-dialog__sort">
+      <app-radio-button [formControl]="sortControl" [items]="sortValues"></app-radio-button>
+    </div>
+
+    <div class="inline-dialog__filters">
+      <ng-container *ngFor="let filter of filters">
+        <ng-container [ngSwitch]="filter.matchMode">
+          <ng-container *ngSwitchCase="MatchMode.SEARCH">
+            <app-autocomplete-input
+              [items]="data"
+              [formControlName]="'search'"
+              [placeholder]="'Search'"></app-autocomplete-input>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <div class="inline-dialog__footer">
+      <button class="inline-dialog__button" (click)="clearFilter()">
+        Reset
+      </button>
+      <button class="inline-dialog__button" type="submit">Apply</button>
+    </div>
+  </form>
+</ng-template>

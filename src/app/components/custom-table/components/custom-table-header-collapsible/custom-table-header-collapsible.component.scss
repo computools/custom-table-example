@@ -1,0 +1,39 @@
+@import "styles/colors";
+
+.column {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 20px 1fr;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+
+  &_with-prefix {
+    height: 52px;
+    .column__name {
+      font-weight: 400;
+    }
+  }
+
+  &_with-filters {
+    grid-template-columns: 20px 1fr 20px;
+  }
+
+  &__prefix {
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 18px;
+    color: $additional-90;
+  }
+
+  &__suffix {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    color: $additional-80;
+  }
+
+  &__filter {
+    margin-left: 20px;
+  }
+}

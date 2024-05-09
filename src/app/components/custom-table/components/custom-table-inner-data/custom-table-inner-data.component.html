@@ -1,0 +1,30 @@
+<ng-container
+  *ngIf="innerDataConfig.template && (data | displayFn: getColumnTemplate: innerDataConfig.template) as template; else dataCell">
+  <ng-container *ngTemplateOutlet="template;
+                           context: {
+                           data,
+                           fieldName: fieldName,
+                           value: (data | displayFn : resolveFieldData : fieldName)}">
+  </ng-container>
+</ng-container>
+<ng-template #dataCell>
+  <div class="data">
+    <ng-container *ngTemplateOutlet="innerColumnTemplate; context:
+                            { innerDataConfig, config, data }"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #innerColumnTemplate let-innerColumn="innerDataConfig" let-column="config" let-data="data">
+  <span class="data__prefix" *ngIf="innerColumn.dataPrefix">
+    {{ innerColumn.dataPrefix }}
+  </span>
+  <span class="data__data" *ngIf="!innerColumn.translatable; else translatable">
+    {{ data | displayFn : getFormattedData: column : fieldName : table.dataUpdate }}
+  </span>
+  <ng-template #translatable>
+    <span class="data__data">
+      {{ data | displayFn : getFormattedData: column : fieldName : table.dataUpdate }}
+    </span>
+  </ng-template>
+</ng-template>
+
